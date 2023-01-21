@@ -126,7 +126,7 @@ export const NumberedListElement = (props) => {
 }
 export const LinkElement = (props) => {
   return (
-    <a {...props.attributes} href={props.element.url} style={{color: "rgb(30 64 175)"}}>
+    <a {...props.attributes} href={props.element.url} style={{ color: "rgb(30 64 175)" }}>
       {props.children}
     </a>
   )
