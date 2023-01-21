@@ -66,7 +66,13 @@ export const SlateEditor = ({ value, onChange, disabled }: IEditor) => {
 
   return (
     <>
-      <div className='border border-gray-400 rounded'>
+      <div
+        style={{
+          borderWidth: "1px",
+          borderColor: "rgb(107 114 128)",
+          borderRadius: "0.25rem"
+        }}
+      >
         <Slate editor={editor} value={slateValue} onChange={onValueChange}>
           {!disabled && (
             <>
@@ -76,7 +82,12 @@ export const SlateEditor = ({ value, onChange, disabled }: IEditor) => {
           )}
 
           <Editable
-            className='m-2 my-5'
+            style={{
+              marginTop: "1.25rem",
+              marginBottom: "1.25rem",
+              marginLeft: "0.5rem",
+              marginRight: "0.5rem"
+            }}
             disabled={disabled}
             readOnly={disabled}
             placeholder='Enter some plain text...'
@@ -115,7 +126,7 @@ export const NumberedListElement = (props) => {
 }
 export const LinkElement = (props) => {
   return (
-    <a {...props.attributes} href={props.element.url} className='text-blue-500'>
+    <a {...props.attributes} href={props.element.url} style={{color: "rgb(30 64 175)"}}>
       {props.children}
     </a>
   )
@@ -144,7 +155,17 @@ export const Leaf = (props) => {
 
 const ToolbarButton = ({ children, active, onClick }) => {
   return (
-    <button onClick={onClick} className={`p-1 w-7 h-7 ${active ? "text-primary" : "text-black"}`}>
+    <button
+      onClick={onClick}
+      style={{
+        padding: "0.25rem",
+        width: "1.75rem",
+        height: "1.75rem",
+        cursor: "pointer",
+        color: !active ? "rgb(31 41 55)" : "rgb(30 64 175)",
+        marginLeft: "0.5rem"
+      }}
+    >
       {children}
     </button>
   )
@@ -153,7 +174,7 @@ const Toolbar = () => {
   const editor = useSlate()
 
   return (
-    <div className='space-x-2 m-2'>
+    <div style={{ margin: "0.5rem" }}>
       <ToolbarButton active={CustomEditor.isBoldActive(editor)} onClick={() => CustomEditor.toggleBoldMark(editor)}>
         <BoldIcon />
       </ToolbarButton>
