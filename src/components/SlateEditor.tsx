@@ -1,9 +1,9 @@
-import { useCallback, useMemo, useState } from "react";
-import { createEditor, Descendant } from "slate";
-import { Slate, Editable, withReact, useSlate } from "slate-react";
-import { withHistory } from "slate-history";
-import { CustomEditor } from "../extends";
-import { withInLines } from "../hooks/withInLines";
+import { useCallback, useMemo, useState } from "react"
+import { createEditor, Descendant } from "slate"
+import { Slate, Editable, withReact, useSlate } from "slate-react"
+import { withHistory } from "slate-history"
+import { CustomEditor } from "../extends"
+import { withInLines } from "../hooks/withInLines"
 import {
   AlignCenterIcon,
   AlignLeftIcon,
@@ -14,18 +14,18 @@ import {
   ListBulletIcon,
   ListNumberedIcon,
   UnderlineIcon
-} from "../icons";
+} from "../icons"
 
 interface IEditor {
-  value: string;
-  onChange: (value: string) => void;
-  disabled?: boolean;
+  value: string
+  onChange: (value: string) => void
+  disabled?: boolean
 }
 
 const SlateEditor = ({ value, onChange, disabled }: IEditor) => {
   const parsedValue = useMemo<Descendant[]>(() => {
     try {
-      return JSON.parse(value);
+      return JSON.parse(value)
     } catch (e) {
       return [
         {
@@ -36,40 +36,37 @@ const SlateEditor = ({ value, onChange, disabled }: IEditor) => {
             }
           ]
         }
-      ];
+      ]
     }
-  }, [value]);
+  }, [value])
 
-  const [slateValue, setSlateValue] = useState<Descendant[]>(parsedValue);
+  const [slateValue, setSlateValue] = useState<Descendant[]>(parsedValue)
   const onValueChange = (val: any) => {
-    setSlateValue(val);
-    onChange(JSON.stringify(val));
-  };
+    setSlateValue(val)
+    onChange(JSON.stringify(val))
+  }
 
-  const editor = useMemo(
-    () => withInLines(withHistory(withReact(createEditor()))),
-    []
-  );
+  const editor = useMemo(() => withInLines(withHistory(withReact(createEditor()))), [])
 
   const renderElement = useCallback((props) => {
     switch (props.element.type) {
       case "link":
-        return <LinkElement {...props} />;
+        return <LinkElement {...props} />
       case "bullet-list":
-        return <BulletListElement {...props} />;
+        return <BulletListElement {...props} />
       case "number-list":
-        return <NumberedListElement {...props} />;
+        return <NumberedListElement {...props} />
       default:
-        return <DefaultElement {...props} />;
+        return <DefaultElement {...props} />
     }
-  }, []);
+  }, [])
   const renderLeaf = useCallback((props) => {
-    return <Leaf {...props} />;
-  }, []);
+    return <Leaf {...props} />
+  }, [])
 
   return (
     <>
-      <div className="border border-gray-400 rounded">
+      <div className='border border-gray-400 rounded'>
         <Slate editor={editor} value={slateValue} onChange={onValueChange}>
           {!disabled && (
             <>
@@ -79,27 +76,27 @@ const SlateEditor = ({ value, onChange, disabled }: IEditor) => {
           )}
 
           <Editable
-            className="m-2 my-5"
+            className='m-2 my-5'
             disabled={disabled}
             readOnly={disabled}
-            placeholder="Enter some plain text..."
+            placeholder='Enter some plain text...'
             renderElement={renderElement}
             renderLeaf={renderLeaf}
             onKeyDown={(event) => {
               if (!event.ctrlKey) {
-                return;
+                return
               }
-              event.preventDefault();
+              event.preventDefault()
 
               switch (event.key) {
                 case "b": {
-                  CustomEditor.toggleBoldMark(editor);
-                  break;
+                  CustomEditor.toggleBoldMark(editor)
+                  break
                 }
 
                 case "i": {
-                  CustomEditor.toggleItalicMark(editor);
-                  break;
+                  CustomEditor.toggleItalicMark(editor)
+                  break
                 }
               }
             }}
@@ -107,32 +104,29 @@ const SlateEditor = ({ value, onChange, disabled }: IEditor) => {
         </Slate>
       </div>
     </>
-  );
-};
+  )
+}
 
 export const BulletListElement = (props) => {
-  return <li {...props.attributes}>{props.children}</li>;
-};
+  return <li {...props.attributes}>{props.children}</li>
+}
 export const NumberedListElement = (props) => {
-  return <li {...props.attributes}>{props.children}</li>;
-};
+  return <li {...props.attributes}>{props.children}</li>
+}
 export const LinkElement = (props) => {
   return (
-    <a {...props.attributes} href={props.element.url} className="text-blue-500">
+    <a {...props.attributes} href={props.element.url} className='text-blue-500'>
       {props.children}
     </a>
-  );
-};
+  )
+}
 export const DefaultElement = (props) => {
   return (
-    <p
-      style={{ textAlign: props.element.align || "left" }}
-      {...props.attributes}
-    >
+    <p style={{ textAlign: props.element.align || "left" }} {...props.attributes}>
       {props.children}
     </p>
-  );
-};
+  )
+}
 export const Leaf = (props) => {
   return (
     <span
@@ -145,34 +139,25 @@ export const Leaf = (props) => {
     >
       {props.children}
     </span>
-  );
-};
+  )
+}
 
 const ToolbarButton = ({ children, active, onClick }) => {
   return (
-    <button
-      onClick={onClick}
-      className={`p-1 w-7 h-7 ${active ? "text-primary" : "text-black"}`}
-    >
+    <button onClick={onClick} className={`p-1 w-7 h-7 ${active ? "text-primary" : "text-black"}`}>
       {children}
     </button>
-  );
-};
+  )
+}
 const Toolbar = () => {
-  const editor = useSlate();
+  const editor = useSlate()
 
   return (
-    <div className="space-x-2 m-2">
-      <ToolbarButton
-        active={CustomEditor.isBoldActive(editor)}
-        onClick={() => CustomEditor.toggleBoldMark(editor)}
-      >
+    <div className='space-x-2 m-2'>
+      <ToolbarButton active={CustomEditor.isBoldActive(editor)} onClick={() => CustomEditor.toggleBoldMark(editor)}>
         <BoldIcon />
       </ToolbarButton>
-      <ToolbarButton
-        active={CustomEditor.isItalicActive(editor)}
-        onClick={() => CustomEditor.toggleItalicMark(editor)}
-      >
+      <ToolbarButton active={CustomEditor.isItalicActive(editor)} onClick={() => CustomEditor.toggleItalicMark(editor)}>
         <ItalicIcon />
       </ToolbarButton>
       <ToolbarButton
@@ -183,9 +168,7 @@ const Toolbar = () => {
       </ToolbarButton>
       <ToolbarButton
         active={CustomEditor.isLinkActive(editor)}
-        onClick={() =>
-          CustomEditor.toggleLinkMark(editor, "https://google.com")
-        }
+        onClick={() => CustomEditor.toggleLinkMark(editor, "https://google.com")}
       >
         <LinkIcon />
       </ToolbarButton>
@@ -220,7 +203,7 @@ const Toolbar = () => {
         <ListNumberedIcon />
       </ToolbarButton>
     </div>
-  );
-};
+  )
+}
 
-export default SlateEditor;
+export default SlateEditor
