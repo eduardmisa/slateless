@@ -22,7 +22,7 @@ interface IEditor {
   disabled?: boolean
 }
 
-const SlateEditor = ({ value, onChange, disabled }: IEditor) => {
+export const SlateEditor = ({ value, onChange, disabled }: IEditor) => {
   const parsedValue = useMemo<Descendant[]>(() => {
     try {
       return JSON.parse(value)
@@ -205,5 +205,3 @@ const Toolbar = () => {
     </div>
   )
 }
-
-export default SlateEditor
