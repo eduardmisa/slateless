@@ -65,56 +65,56 @@ export const SlateEditor = ({ value, onChange, disabled }: IEditor) => {
   }, [])
 
   return (
-    <>
-      <div
-        style={{
-          borderWidth: "1px",
-          borderColor: "rgb(107 114 128)",
-          borderRadius: "0.25rem"
-        }}
-      >
-        <Slate editor={editor} value={slateValue} onChange={onValueChange}>
-          {!disabled && (
-            <>
-              <Toolbar />
-              <hr />
-            </>
-          )}
+    <div
+      style={{
+        width: "100%",
+        borderWidth: "1px",
+        borderColor: "rgb(107 114 128)",
+        borderRadius: "0.25rem"
+      }}
+    >
+      <Slate editor={editor} value={slateValue} onChange={onValueChange}>
+        {!disabled && (
+          <>
+            <Toolbar />
+            <hr />
+          </>
+        )}
 
-          <Editable
-            style={{
-              marginTop: "1.25rem",
-              marginBottom: "1.25rem",
-              marginLeft: "0.5rem",
-              marginRight: "0.5rem"
-            }}
-            disabled={disabled}
-            readOnly={disabled}
-            placeholder='Enter some plain text...'
-            renderElement={renderElement}
-            renderLeaf={renderLeaf}
-            onKeyDown={(event) => {
-              if (!event.ctrlKey) {
-                return
+        <Editable
+          style={{
+            width: "100%",
+            marginTop: "1.25rem",
+            marginBottom: "1.25rem",
+            marginLeft: "0.5rem",
+            marginRight: "0.5rem"
+          }}
+          disabled={disabled}
+          readOnly={disabled}
+          placeholder='Enter some plain text...'
+          renderElement={renderElement}
+          renderLeaf={renderLeaf}
+          onKeyDown={(event) => {
+            if (!event.ctrlKey) {
+              return
+            }
+            event.preventDefault()
+
+            switch (event.key) {
+              case "b": {
+                CustomEditor.toggleBoldMark(editor)
+                break
               }
-              event.preventDefault()
 
-              switch (event.key) {
-                case "b": {
-                  CustomEditor.toggleBoldMark(editor)
-                  break
-                }
-
-                case "i": {
-                  CustomEditor.toggleItalicMark(editor)
-                  break
-                }
+              case "i": {
+                CustomEditor.toggleItalicMark(editor)
+                break
               }
-            }}
-          ></Editable>
-        </Slate>
-      </div>
-    </>
+            }
+          }}
+        ></Editable>
+      </Slate>
+    </div>
   )
 }
 

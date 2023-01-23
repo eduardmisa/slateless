@@ -42,7 +42,12 @@ export const SlateContent = ({ value }: IContent) => {
 
   return (
     <Slate editor={editor} value={[...parsedValue]}>
-      <Editable readOnly={true} renderElement={renderElement} renderLeaf={renderLeaf}></Editable>
+      <Editable
+        readOnly={true}
+        renderElement={renderElement}
+        renderLeaf={renderLeaf}
+        style={{ width: "100%" }}
+      ></Editable>
     </Slate>
   )
 }
