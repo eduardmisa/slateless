@@ -1,6 +1,6 @@
 import { Editor, Transforms, Element as SlateElement, Range } from "slate"
 import { useSlate } from "slate-react"
-import { TEXT_ALIGN_TYPES, LIST_TYPES, FormatType, CustomElement } from "../extends"
+import { TEXT_ALIGN_TYPES, LIST_TYPES, CustomElement, HeadingType, MarkType, ListType, InlineType, TextAlignType } from "../extends"
 import {
   BoldIcon,
   ItalicIcon,
@@ -10,7 +10,13 @@ import {
   AlignLeftIcon,
   AlignCenterIcon,
   AlignRightIcon,
-  LinkIcon
+  LinkIcon,
+  Heading1Icon,
+  Heading2Icon,
+  Heading3Icon,
+  Heading4Icon,
+  Heading5Icon,
+  Heading6Icon
 } from "../icons"
 
 export const toggleBlock = (editor, format) => {
@@ -21,7 +27,7 @@ export const toggleBlock = (editor, format) => {
     match: (n) =>
       !Editor.isEditor(n) &&
       SlateElement.isElement(n) &&
-      LIST_TYPES.includes(n.type) &&
+      LIST_TYPES.includes(n.type as any) &&
       !TEXT_ALIGN_TYPES.includes(format),
     split: true
   })
@@ -108,9 +114,45 @@ export const isLinkActive = (editor) => {
 export const Element = ({ attributes, children, element }) => {
   const style = { textAlign: element.align }
   switch (element.type) {
+    case "heading-1":
+      return (
+        <h1 style={style} {...attributes}>
+          {children}
+        </h1>
+      )
+    case "heading-2":
+      return (
+        <h2 style={style} {...attributes}>
+          {children}
+        </h2>
+      )
+    case "heading-3":
+      return (
+        <h3 style={style} {...attributes}>
+          {children}
+        </h3>
+      )
+    case "heading-4":
+      return (
+        <h4 style={style} {...attributes}>
+          {children}
+        </h4>
+      )
+    case "heading-5":
+      return (
+        <h5 style={style} {...attributes}>
+          {children}
+        </h5>
+      )
+    case "heading-6":
+      return (
+        <h6 style={style} {...attributes}>
+          {children}
+        </h6>
+      )
     case "link":
       return (
-        <a style={style} {...attributes} href={element.url} target='_blank'>
+        <a style={style} {...attributes} href={element.url} target='_blank' rel="noreferrer">
           {children}
         </a>
       )
@@ -162,11 +204,17 @@ export const Leaf = ({ attributes, children, leaf }) => {
 }
 
 interface IIcon {
-  format: FormatType
+  format: HeadingType | MarkType | InlineType | ListType | TextAlignType
 }
 const Icon = ({ format }: IIcon) => {
   return (
     <>
+      {format === "heading-1" && <Heading1Icon />}
+      {format === "heading-2" && <Heading2Icon />}
+      {format === "heading-3" && <Heading3Icon />}
+      {format === "heading-4" && <Heading4Icon />}
+      {format === "heading-5" && <Heading5Icon />}
+      {format === "heading-6" && <Heading6Icon />}
       {format === "bold" && <BoldIcon />}
       {format === "italic" && <ItalicIcon />}
       {format === "underline" && <UnderlineIcon />}
@@ -181,15 +229,20 @@ const Icon = ({ format }: IIcon) => {
 }
 
 interface IBlockButton {
-  format: FormatType
+  format: InlineType | HeadingType | MarkType | ListType | TextAlignType;
+  onClick?: () => void
 }
-export const BlockButton = ({ format }: IBlockButton) => {
+export const BlockButton = ({ format, onClick }: IBlockButton) => {
   const editor = useSlate()
   return (
     <Button
-      active={isBlockActive(editor, format, TEXT_ALIGN_TYPES.includes(format) ? "align" : "type")}
+      active={isBlockActive(editor, format, TEXT_ALIGN_TYPES.includes(format as any) ? "align" : "type")}
       onClick={(event) => {
         event.preventDefault()
+        if (onClick) {
+          onClick()
+          return
+        }
         toggleBlock(editor, format)
       }}
     >
@@ -199,23 +252,16 @@ export const BlockButton = ({ format }: IBlockButton) => {
 }
 
 interface IMarkButton {
-  format: FormatType
-  onClick?: () => void
+  format: MarkType;
 }
-export const MarkButton = ({ format, onClick }: IMarkButton) => {
+export const MarkButton = ({ format }: IMarkButton) => {
   const editor = useSlate()
   return (
     <Button
       active={isMarkActive(editor, format)}
       onClick={(event) => {
-        event.preventDefault()
-
-        if (onClick) {
-          onClick()
-          return
-        }
-
-        toggleMark(editor, format)
+        event.preventDefault();
+        toggleMark(editor, format);
       }}
     >
       <Icon format={format} />
@@ -233,7 +279,7 @@ const Button = ({ children, active, onClick }) => {
         height: "1.75rem",
         cursor: "pointer",
         color: !active ? "rgb(31 41 55)" : "rgb(30 64 175)",
-        marginLeft: "0.5rem"
+        marginRight: "0.5rem"
       }}
     >
       {children}

@@ -1,22 +1,26 @@
-import { useCallback, useMemo, useState } from "react"
+import { Fragment, useCallback, useMemo, useState } from "react"
 import isHotkey from "is-hotkey"
 import { Editable, withReact, Slate } from "slate-react"
 import { createEditor, Descendant } from "slate"
 import { withHistory } from "slate-history"
-import { HOTKEYS } from "../extends"
+import { HeadingType, HOTKEYS, InlineType, ListType, MarkType, TextAlignType } from "../extends"
 import { Element, MarkButton, BlockButton, toggleMark, Leaf, toggleLink } from "../helpers"
 import { withInLines } from "../hooks/withInLines"
-
-const Toolbar = ({ children }) => {
-  return <div style={{ margin: "0.5rem" }}>{children}</div>
-}
 
 interface IEditor {
   value: string
   onChange: (value: string) => void
+  toolbar?: (HeadingType | MarkType | InlineType | ListType | TextAlignType)[]
   disabled?: boolean
 }
-export const SlateEditor = ({ value, onChange, disabled }: IEditor) => {
+export const SlateEditor = ({
+  value,
+  onChange,
+  toolbar,
+  disabled
+}: IEditor) => {
+  toolbar = (toolbar && toolbar.length > 0) ? toolbar : defaultTools
+
   const parsedValue = useMemo<Descendant[]>(() => {
     try {
       return JSON.parse(value)
@@ -63,46 +67,61 @@ export const SlateEditor = ({ value, onChange, disabled }: IEditor) => {
       {!disabled && (
         <>
           <Toolbar>
-            <MarkButton format='bold' />
-            <MarkButton format='italic' />
-            <MarkButton format='underline' />
-            <div style={{ position: "relative", display: "inline-block" }}>
-              <MarkButton format='link' onClick={toggleShowLink} />
-              <div
-                style={{
-                  display: showLink ? "flex" : "none",
-                  position: "absolute",
-                  padding: "0.5rem",
-                  border: "1px solid",
-                  backgroundColor: "#ffffff",
-                  marginLeft: "0.5rem",
-                  marginTop: "0.1rem",
-                  zIndex: "9999"
-                }}
-              >
-                <input
-                  value={link}
-                  onChange={(e) => onLinkChange(e.target.value)}
-                  onKeyUp={(e) => {
-                    if (e.key === "Escape") {
-                      toggleShowLink()
-                      onLinkChange("")
-                    }
-                    if (e.key === "Enter") {
-                      onLinkApply()
-                    }
-                  }}
-                />
-                <button style={{ marginLeft: "0.5rem", cursor: "pointer" }} onClick={onLinkApply}>
-                  link
-                </button>
-              </div>
-            </div>
-            <BlockButton format='numbered-list' />
-            <BlockButton format='bulleted-list' />
-            <BlockButton format='left' />
-            <BlockButton format='center' />
-            <BlockButton format='right' />
+            {toolbar && toolbar.length > 0 && (
+              toolbar.map((format, index) => (
+                <Fragment key={index}>
+                  {format === "heading-1" && <BlockButton format='heading-1' />}
+                  {format === "heading-2" && <BlockButton format='heading-2' />}
+                  {format === "heading-3" && <BlockButton format='heading-3' />}
+                  {format === "heading-4" && <BlockButton format='heading-4' />}
+                  {format === "heading-5" && <BlockButton format='heading-5' />}
+                  {format === "heading-6" && <BlockButton format='heading-6' />}
+                  {format === "bold" && <MarkButton format='bold' />}
+                  {format === "italic" && <MarkButton format='italic' />}
+                  {format === "underline" && <MarkButton format='underline' />}
+                  {format === "link" && (
+                    <div style={{ position: "relative", display: "inline-block" }}>
+                      <BlockButton format='link' onClick={toggleShowLink} />
+                      <div
+                        style={{
+                          display: showLink ? "flex" : "none",
+                          position: "absolute",
+                          padding: "0.5rem",
+                          backgroundColor: "#ffffff",
+                          marginLeft: "0.5rem",
+                          marginTop: "0.1rem",
+                          zIndex: "9999",
+                          boxShadow: "0 3px 10px rgb(0 0 0 / 0.2)"
+                        }}
+                      >
+                        <input
+                          style={{ padding: "0.3rem" }}
+                          value={link}
+                          onChange={(e) => onLinkChange(e.target.value)}
+                          onKeyUp={(e) => {
+                            if (e.key === "Escape") {
+                              toggleShowLink()
+                              onLinkChange("")
+                            }
+                            if (e.key === "Enter") {
+                              onLinkApply()
+                            }
+                          }}
+                        />
+                        <button style={{ marginLeft: "0.5rem", cursor: "pointer" }} onClick={onLinkApply}>
+                          link
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  {format === "numbered-list" && <BlockButton format='numbered-list' />}
+                  {format === "bulleted-list" && <BlockButton format='bulleted-list' />}
+                  {format === "left" && <BlockButton format='left' />}
+                  {format === "center" && <BlockButton format='center' />}
+                  {format === "right" && <BlockButton format='right' />}
+                </Fragment>
+              ))
+            )}
           </Toolbar>
           <hr />
         </>
@@ -135,3 +154,19 @@ export const SlateEditor = ({ value, onChange, disabled }: IEditor) => {
     </Slate>
   )
 }
+
+const Toolbar = ({ children }) => {
+  return <div style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}>{children}</div>
+}
+
+const defaultTools: (HeadingType | MarkType | InlineType | ListType | TextAlignType)[] = [
+  "bold",
+  "italic",
+  "underline",
+  "link",
+  "numbered-list",
+  "bulleted-list",
+  "left",
+  "center",
+  "right"
+]
