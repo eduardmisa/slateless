@@ -67,8 +67,7 @@ export const SlateEditor = ({ value, onChange, disabled }: IEditor) => {
   return (
     <div
       style={{
-        borderWidth: "1px",
-        borderColor: "rgb(107 114 128)",
+        border: "1px solid rgb(107 114 128)",
         borderRadius: "0.25rem"
       }}
     >
@@ -89,7 +88,7 @@ export const SlateEditor = ({ value, onChange, disabled }: IEditor) => {
           }}
           disabled={disabled}
           readOnly={disabled}
-          placeholder='Enter some plain text...'
+          placeholder=""
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           onKeyDown={(event) => {
