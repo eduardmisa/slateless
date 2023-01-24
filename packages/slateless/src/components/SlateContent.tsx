@@ -1,9 +1,10 @@
+// import { withInLines } from "../hooks/withInLines"
 import { createEditor, Descendant } from "slate"
 import { Editable, Slate, withReact } from "slate-react"
-import { useCallback, useMemo, useState } from "react"
-import { withInLines } from "../hooks/withInLines"
+import { useCallback, useMemo } from "react"
 import { withHistory } from "slate-history"
-import { DefaultElement, Leaf, LinkElement } from "./SlateEditor"
+import { Element, Leaf } from "../helpers"
+import { withInLines } from "../hooks/withInLines"
 
 interface IContent {
   value: string
@@ -26,19 +27,9 @@ export const SlateContent = ({ value }: IContent) => {
     }
   }, [value])
 
-  const [editor] = useState(withInLines(withHistory(withReact(createEditor()))))
-
-  const renderElement = useCallback((props) => {
-    switch (props.element.type) {
-      case "link":
-        return <LinkElement {...props} />
-      default:
-        return <DefaultElement {...props} />
-    }
-  }, [])
-  const renderLeaf = useCallback((props) => {
-    return <Leaf {...props} />
-  }, [])
+  const renderElement = useCallback(props => <Element {...props} />, [])
+  const renderLeaf = useCallback(props => <Leaf {...props} />, [])
+  const editor = useMemo(() => withInLines(withHistory(withReact(createEditor()))), [])
 
   return (
     <Slate editor={editor} value={[...parsedValue]}>
@@ -47,7 +38,7 @@ export const SlateContent = ({ value }: IContent) => {
         renderElement={renderElement}
         renderLeaf={renderLeaf}
         style={{ width: "100%" }}
-      ></Editable>
+      />
     </Slate>
   )
 }

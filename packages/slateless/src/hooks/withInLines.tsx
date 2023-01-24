@@ -1,5 +1,5 @@
 import isUrl from "is-url"
-import { CustomEditor } from "../extends"
+import { toggleLink } from "../helpers"
 
 export const withInLines = (editor) => {
   const { insertData, insertText, isInline } = editor
@@ -8,7 +8,7 @@ export const withInLines = (editor) => {
 
   editor.insertText = (text) => {
     if (text && isUrl(text)) {
-      CustomEditor.toggleLinkMark(editor, text)
+      toggleLink(editor, text)
     } else {
       insertText(text)
     }
@@ -18,7 +18,7 @@ export const withInLines = (editor) => {
     const text = data.getData("text/plain")
 
     if (text && isUrl(text)) {
-      CustomEditor.toggleLinkMark(editor, text)
+      toggleLink(editor, text)
     } else {
       insertData(data)
     }
