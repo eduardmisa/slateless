@@ -2,32 +2,10 @@ import { BaseEditor } from "slate"
 import { ReactEditor } from "slate-react"
 
 export const HOTKEYS = {
-  // 'mod+b': 'bold',
-  // 'mod+i': 'italic',
-  // 'mod+u': 'underline',
   "ctrl+b": "bold",
   "ctrl+i": "italic",
   "ctrl+u": "underline"
 }
-
-// export const FORMAT_TYPE = [
-//   "heading-1",
-//   "heading-2",
-//   "heading-3",
-//   "heading-4",
-//   "heading-5",
-//   "heading-6",
-//   "bold",
-//   "italic",
-//   "underline",
-//   "link",
-//   "numbered-list",
-//   "bulleted-list",
-//   "left",
-//   "center",
-//   "right"
-// ] as const
-// export type FormatType = (typeof FORMAT_TYPE)[number]
 
 export const HEADING_TYPES = [
   "heading-1",
