@@ -7,26 +7,13 @@ export const HOTKEYS = {
   "ctrl+u": "underline"
 }
 
-export const HEADING_TYPES = [
-  "heading-1",
-  "heading-2",
-  "heading-3",
-  "heading-4",
-  "heading-5",
-  "heading-6"
-] as const
+export const HEADING_TYPES = ["heading-1", "heading-2", "heading-3", "heading-4", "heading-5", "heading-6"] as const
 export type HeadingType = (typeof HEADING_TYPES)[number]
 
-export const MARK_TYPES = [
-  "bold",
-  "italic",
-  "underline"
-] as const
+export const MARK_TYPES = ["bold", "italic", "underline"] as const
 export type MarkType = (typeof MARK_TYPES)[number]
 
-export const INLINE_TYPES = [
-  "link",
-] as const
+export const INLINE_TYPES = ["link"] as const
 export type InlineType = (typeof INLINE_TYPES)[number]
 
 export const LIST_TYPES = ["numbered-list", "bulleted-list"] as const

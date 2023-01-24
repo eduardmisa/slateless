@@ -13,13 +13,8 @@ interface IEditor {
   toolbar?: (HeadingType | MarkType | InlineType | ListType | TextAlignType)[]
   disabled?: boolean
 }
-export const SlateEditor = ({
-  value,
-  onChange,
-  toolbar,
-  disabled
-}: IEditor) => {
-  toolbar = (toolbar && toolbar.length > 0) ? toolbar : defaultTools
+export const SlateEditor = ({ value, onChange, toolbar, disabled }: IEditor) => {
+  toolbar = toolbar && toolbar.length > 0 ? toolbar : defaultTools
 
   const parsedValue = useMemo<Descendant[]>(() => {
     try {
@@ -67,7 +62,8 @@ export const SlateEditor = ({
       {!disabled && (
         <>
           <Toolbar>
-            {toolbar && toolbar.length > 0 && (
+            {toolbar &&
+              toolbar.length > 0 &&
               toolbar.map((format, index) => (
                 <Fragment key={index}>
                   {format === "heading-1" && <BlockButton format='heading-1' />}
@@ -120,8 +116,7 @@ export const SlateEditor = ({
                   {format === "center" && <BlockButton format='center' />}
                   {format === "right" && <BlockButton format='right' />}
                 </Fragment>
-              ))
-            )}
+              ))}
           </Toolbar>
           <hr />
         </>

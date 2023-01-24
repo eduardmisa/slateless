@@ -1,6 +1,15 @@
 import { Editor, Transforms, Element as SlateElement, Range } from "slate"
 import { useSlate } from "slate-react"
-import { TEXT_ALIGN_TYPES, LIST_TYPES, CustomElement, HeadingType, MarkType, ListType, InlineType, TextAlignType } from "../extends"
+import {
+  TEXT_ALIGN_TYPES,
+  LIST_TYPES,
+  CustomElement,
+  HeadingType,
+  MarkType,
+  ListType,
+  InlineType,
+  TextAlignType
+} from "../extends"
 import {
   BoldIcon,
   ItalicIcon,
@@ -152,7 +161,7 @@ export const Element = ({ attributes, children, element }) => {
       )
     case "link":
       return (
-        <a style={style} {...attributes} href={element.url} target='_blank' rel="noreferrer">
+        <a style={style} {...attributes} href={element.url} target='_blank' rel='noreferrer'>
           {children}
         </a>
       )
@@ -229,7 +238,7 @@ const Icon = ({ format }: IIcon) => {
 }
 
 interface IBlockButton {
-  format: InlineType | HeadingType | MarkType | ListType | TextAlignType;
+  format: InlineType | HeadingType | MarkType | ListType | TextAlignType
   onClick?: () => void
 }
 export const BlockButton = ({ format, onClick }: IBlockButton) => {
@@ -252,7 +261,7 @@ export const BlockButton = ({ format, onClick }: IBlockButton) => {
 }
 
 interface IMarkButton {
-  format: MarkType;
+  format: MarkType
 }
 export const MarkButton = ({ format }: IMarkButton) => {
   const editor = useSlate()
@@ -260,8 +269,8 @@ export const MarkButton = ({ format }: IMarkButton) => {
     <Button
       active={isMarkActive(editor, format)}
       onClick={(event) => {
-        event.preventDefault();
-        toggleMark(editor, format);
+        event.preventDefault()
+        toggleMark(editor, format)
       }}
     >
       <Icon format={format} />
