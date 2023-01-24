@@ -1,6 +1,6 @@
 {
   "name": "slateless",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "author": "EduardMisa",
   "license": "MIT",
   "description": "A minimal richtext editor based on Slate.",

@@ -27,18 +27,13 @@ export const SlateContent = ({ value }: IContent) => {
     }
   }, [value])
 
-  const renderElement = useCallback(props => <Element {...props} />, [])
-  const renderLeaf = useCallback(props => <Leaf {...props} />, [])
+  const renderElement = useCallback((props) => <Element {...props} />, [])
+  const renderLeaf = useCallback((props) => <Leaf {...props} />, [])
   const editor = useMemo(() => withInLines(withHistory(withReact(createEditor()))), [])
 
   return (
     <Slate editor={editor} value={[...parsedValue]}>
-      <Editable
-        readOnly={true}
-        renderElement={renderElement}
-        renderLeaf={renderLeaf}
-        style={{ width: "100%" }}
-      />
+      <Editable readOnly={true} renderElement={renderElement} renderLeaf={renderLeaf} style={{ width: "100%" }} />
     </Slate>
   )
 }

@@ -1,37 +1,38 @@
+import { Editor, Transforms, Element as SlateElement, Range } from "slate"
+import { useSlate } from "slate-react"
+import { TEXT_ALIGN_TYPES, LIST_TYPES, FormatType, CustomElement } from "../extends"
 import {
-  Editor,
-  Transforms,
-  Element as SlateElement,
-  Range
-} from 'slate'
-import { useSlate } from 'slate-react'
-import { TEXT_ALIGN_TYPES, LIST_TYPES, FormatType, CustomElement } from '../extends'
-import { BoldIcon, ItalicIcon, UnderlineIcon, ListNumberedIcon, ListBulletIcon, AlignLeftIcon, AlignCenterIcon, AlignRightIcon, LinkIcon } from '../icons'
+  BoldIcon,
+  ItalicIcon,
+  UnderlineIcon,
+  ListNumberedIcon,
+  ListBulletIcon,
+  AlignLeftIcon,
+  AlignCenterIcon,
+  AlignRightIcon,
+  LinkIcon
+} from "../icons"
 
 export const toggleBlock = (editor, format) => {
-  const isActive = isBlockActive(
-    editor,
-    format,
-    TEXT_ALIGN_TYPES.includes(format) ? 'align' : 'type'
-  )
+  const isActive = isBlockActive(editor, format, TEXT_ALIGN_TYPES.includes(format) ? "align" : "type")
   const isList = LIST_TYPES.includes(format)
 
   Transforms.unwrapNodes(editor, {
-    match: n =>
+    match: (n) =>
       !Editor.isEditor(n) &&
       SlateElement.isElement(n) &&
       LIST_TYPES.includes(n.type) &&
       !TEXT_ALIGN_TYPES.includes(format),
-    split: true,
+    split: true
   })
   let newProperties: Partial<SlateElement>
   if (TEXT_ALIGN_TYPES.includes(format)) {
     newProperties = {
-      align: isActive ? undefined : format,
+      align: isActive ? undefined : format
     }
   } else {
     newProperties = {
-      type: isActive ? 'paragraph' : isList ? 'list-item' : format,
+      type: isActive ? "paragraph" : isList ? "list-item" : format
     }
   }
   Transforms.setNodes<SlateElement>(editor, newProperties)
@@ -78,17 +79,14 @@ export const toggleLink = (editor, url) => {
   }
 }
 
-export const isBlockActive = (editor, format, blockType = 'type') => {
+export const isBlockActive = (editor, format, blockType = "type") => {
   const { selection } = editor
   if (!selection) return false
 
   const [match] = Array.from(
     Editor.nodes(editor, {
       at: Editor.unhangRange(editor, selection),
-      match: n =>
-        !Editor.isEditor(n) &&
-        SlateElement.isElement(n) &&
-        n[blockType] === format,
+      match: (n) => !Editor.isEditor(n) && SlateElement.isElement(n) && n[blockType] === format
     })
   )
 
@@ -100,7 +98,7 @@ export const isMarkActive = (editor, format) => {
   return marks ? marks[format] === true : false
 }
 
-export const isLinkActive = (editor) =>  {
+export const isLinkActive = (editor) => {
   const [match] = Editor.nodes(editor, {
     match: (n: any) => n.type === "link"
   })
@@ -110,25 +108,25 @@ export const isLinkActive = (editor) =>  {
 export const Element = ({ attributes, children, element }) => {
   const style = { textAlign: element.align }
   switch (element.type) {
-    case 'link':
+    case "link":
       return (
-        <a style={style} {...attributes} href={element.url} target="_blank">
+        <a style={style} {...attributes} href={element.url} target='_blank'>
           {children}
         </a>
       )
-    case 'numbered-list':
+    case "numbered-list":
       return (
         <ol style={style} {...attributes}>
           {children}
         </ol>
       )
-    case 'bulleted-list':
+    case "bulleted-list":
       return (
         <ul style={style} {...attributes}>
           {children}
         </ul>
       )
-    case 'list-item':
+    case "list-item":
       return (
         <li style={style} {...attributes}>
           {children}
@@ -183,18 +181,14 @@ const Icon = ({ format }: IIcon) => {
 }
 
 interface IBlockButton {
-  format: FormatType,
+  format: FormatType
 }
 export const BlockButton = ({ format }: IBlockButton) => {
   const editor = useSlate()
   return (
     <Button
-      active={isBlockActive(
-        editor,
-        format,
-        TEXT_ALIGN_TYPES.includes(format) ? 'align' : 'type'
-      )}
-      onClick={event => {
+      active={isBlockActive(editor, format, TEXT_ALIGN_TYPES.includes(format) ? "align" : "type")}
+      onClick={(event) => {
         event.preventDefault()
         toggleBlock(editor, format)
       }}
@@ -205,20 +199,20 @@ export const BlockButton = ({ format }: IBlockButton) => {
 }
 
 interface IMarkButton {
-  format: FormatType,
-  onClick?: () => void;
+  format: FormatType
+  onClick?: () => void
 }
 export const MarkButton = ({ format, onClick }: IMarkButton) => {
   const editor = useSlate()
   return (
     <Button
       active={isMarkActive(editor, format)}
-      onClick={event => {
+      onClick={(event) => {
         event.preventDefault()
 
         if (onClick) {
-          onClick();
-          return;
+          onClick()
+          return
         }
 
         toggleMark(editor, format)
@@ -234,12 +228,12 @@ const Button = ({ children, active, onClick }) => {
     <button
       onClick={onClick}
       style={{
-          padding: "0.25rem",
-          width: "1.75rem",
-          height: "1.75rem",
-          cursor: "pointer",
-          color: !active ? "rgb(31 41 55)" : "rgb(30 64 175)",
-          marginLeft: "0.5rem"
+        padding: "0.25rem",
+        width: "1.75rem",
+        height: "1.75rem",
+        cursor: "pointer",
+        color: !active ? "rgb(31 41 55)" : "rgb(30 64 175)",
+        marginLeft: "0.5rem"
       }}
     >
       {children}

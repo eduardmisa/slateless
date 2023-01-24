@@ -5,9 +5,9 @@ export const HOTKEYS = {
   // 'mod+b': 'bold',
   // 'mod+i': 'italic',
   // 'mod+u': 'underline',
-  'ctrl+b': 'bold',
-  'ctrl+i': 'italic',
-  'ctrl+u': 'underline',
+  "ctrl+b": "bold",
+  "ctrl+i": "italic",
+  "ctrl+u": "underline"
 }
 
 export const FORMAT_TYPE = [
@@ -19,15 +19,15 @@ export const FORMAT_TYPE = [
   "bulleted-list",
   "left",
   "center",
-  "right",
+  "right"
 ]
-export type FormatType = typeof FORMAT_TYPE[number]
+export type FormatType = (typeof FORMAT_TYPE)[number]
 
-export const LIST_TYPES = ['numbered-list', 'bulleted-list']
-export type ListType = typeof LIST_TYPES[number]
+export const LIST_TYPES = ["numbered-list", "bulleted-list"]
+export type ListType = (typeof LIST_TYPES)[number]
 
-export const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify']
-export type TextAlignType = typeof TEXT_ALIGN_TYPES[number]
+export const TEXT_ALIGN_TYPES = ["left", "center", "right", "justify"]
+export type TextAlignType = (typeof TEXT_ALIGN_TYPES)[number]
 
 export type CustomElement = {
   type: "link" | "paragraph" | "bulleted-list" | "numbered-list"
