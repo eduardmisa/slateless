@@ -3,14 +3,14 @@ import isHotkey from "is-hotkey"
 import { Editable, withReact, Slate } from "slate-react"
 import { createEditor, Descendant } from "slate"
 import { withHistory } from "slate-history"
-import { HeadingType, HOTKEYS, InlineType, ListType, MarkType, TextAlignType } from "../extends"
+import { HOTKEYS, ToolTypes } from "../extends"
 import { Element, MarkButton, BlockButton, toggleMark, Leaf, toggleLink } from "../helpers"
 import { withInLines } from "../hooks/withInLines"
 
 interface IEditor {
   value: string
   onChange: (value: string) => void
-  toolbar?: (HeadingType | MarkType | InlineType | ListType | TextAlignType)[]
+  toolbar?: ToolTypes[]
   disabled?: boolean
 }
 export const SlateEditor = ({ value, onChange, toolbar, disabled }: IEditor) => {
@@ -75,6 +75,7 @@ export const SlateEditor = ({ value, onChange, toolbar, disabled }: IEditor) => 
                   {format === "bold" && <MarkButton format='bold' />}
                   {format === "italic" && <MarkButton format='italic' />}
                   {format === "underline" && <MarkButton format='underline' />}
+                  {format === "strikethrough" && <MarkButton format='strikethrough' />}
                   {format === "link" && (
                     <div style={{ position: "relative", display: "inline-block" }}>
                       <BlockButton format='link' onClick={toggleShowLink} />
@@ -154,7 +155,7 @@ const Toolbar = ({ children }) => {
   return <div style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}>{children}</div>
 }
 
-const defaultTools: (HeadingType | MarkType | InlineType | ListType | TextAlignType)[] = [
+const defaultTools: ToolTypes[] = [
   "bold",
   "italic",
   "underline",

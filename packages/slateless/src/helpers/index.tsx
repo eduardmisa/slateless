@@ -8,7 +8,8 @@ import {
   MarkType,
   ListType,
   InlineType,
-  TextAlignType
+  TextAlignType,
+  ToolTypes
 } from "../extends"
 import {
   BoldIcon,
@@ -25,7 +26,8 @@ import {
   Heading3Icon,
   Heading4Icon,
   Heading5Icon,
-  Heading6Icon
+  Heading6Icon,
+  StrikethroughIcon
 } from "../icons"
 
 export const toggleBlock = (editor, format) => {
@@ -209,11 +211,15 @@ export const Leaf = ({ attributes, children, leaf }) => {
     children = <u>{children}</u>
   }
 
+  if (leaf.strikethrough) {
+    children = <s>{children}</s>
+  }
+
   return <span {...attributes}>{children}</span>
 }
 
 interface IIcon {
-  format: HeadingType | MarkType | InlineType | ListType | TextAlignType
+  format: ToolTypes
 }
 const Icon = ({ format }: IIcon) => {
   return (
@@ -227,6 +233,7 @@ const Icon = ({ format }: IIcon) => {
       {format === "bold" && <BoldIcon />}
       {format === "italic" && <ItalicIcon />}
       {format === "underline" && <UnderlineIcon />}
+      {format === "strikethrough" && <StrikethroughIcon />}
       {format === "link" && <LinkIcon />}
       {format === "numbered-list" && <ListNumberedIcon />}
       {format === "bulleted-list" && <ListBulletIcon />}
@@ -238,7 +245,7 @@ const Icon = ({ format }: IIcon) => {
 }
 
 interface IBlockButton {
-  format: InlineType | HeadingType | MarkType | ListType | TextAlignType
+  format: InlineType | HeadingType | ListType | TextAlignType
   onClick?: () => void
 }
 export const BlockButton = ({ format, onClick }: IBlockButton) => {

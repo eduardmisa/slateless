@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SlateEditor, SlateContent } from "slateless"
+import { SlateEditor, SlateContent } from "./slateless"
 
 function App() {
   const [value, setValueChange] = useState("");
@@ -9,7 +9,7 @@ function App() {
 
   return (
     <>
-      <SlateEditor value={value} onChange={onValueChange} />
+      <SlateEditor value={value} onChange={onValueChange} toolbar={["bold", "bold"]} />
       <br /><br />
       <SlateContent value={value} key={Date.now()} />
       <br /><br />

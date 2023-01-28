@@ -1,4 +1,3 @@
-<sub><sup>NOTE: Still Under Development.</sup></sub>
 ### A Monorepo for Slateless
 ###### Packages
 ```

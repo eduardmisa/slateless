@@ -1,4 +1,3 @@
-<sub><sup>NOTE: Still Under Development.</sup></sub>
 ### A *React* Minimal Rich Text Editor based on Slate.
 ##### *Slate but Less*. [*Demo*](https://emisa.me/npm/slateless)
 Dealing with Slate can be a very tedious task for most of us.
@@ -35,4 +34,29 @@ Let's assume you want to render this everytime you are editing the editor.
 code:
 
 <SlateContent value={value} key={Date.now()} />
+```
+###### Customizing Toolbars:
+```
+<SlateEditor
+    value={value}
+    onChange={onValueChange}
+    toolbar={[
+        "heading-1",
+        "heading-2",
+        "heading-3",
+        "heading-4",
+        "heading-5",
+        "heading-6",
+        "bold",
+        "italic",
+        "underline",
+        "strikethrough",
+        "link",
+        "numbered-list",
+        "bulleted-list",
+        "left",
+        "center",
+        "right"
+    ]}
+/>
 ```
