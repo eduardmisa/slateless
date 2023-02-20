@@ -14,5 +14,6 @@
   "scripts": {
     "build": "npx lerna run build",
     "dev": "cd packages/example && yarn start"
-  }
+  },
+  "version": "1.0.9"
 }
