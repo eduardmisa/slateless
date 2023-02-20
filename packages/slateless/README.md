@@ -56,7 +56,8 @@ code:
         "bulleted-list",
         "left",
         "center",
-        "right"
+        "right",
+        "image"
     ]}
 />
 ```
