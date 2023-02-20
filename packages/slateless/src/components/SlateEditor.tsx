@@ -4,8 +4,9 @@ import { Editable, withReact, Slate } from "slate-react"
 import { createEditor, Descendant } from "slate"
 import { withHistory } from "slate-history"
 import { HOTKEYS, ToolTypes } from "../extends"
-import { Element, MarkButton, BlockButton, toggleMark, Leaf, toggleLink } from "../helpers"
+import { Element, MarkButton, BlockButton, toggleMark, Leaf, toggleLink, toggleImageLink } from "../helpers"
 import { withInLines } from "../hooks/withInLines"
+import { withImages } from "../hooks/withImage"
 
 interface IEditor {
   value: string
@@ -41,7 +42,7 @@ export const SlateEditor = ({ value, onChange, toolbar, disabled }: IEditor) => 
 
   const renderElement = useCallback((props) => <Element {...props} />, [])
   const renderLeaf = useCallback((props) => <Leaf {...props} />, [])
-  const editor = useMemo(() => withInLines(withHistory(withReact(createEditor()))), [])
+  const editor = useMemo(() => withInLines(withImages(withHistory(withReact(createEditor())))), [])
 
   const [showLink, setShowLink] = useState(false)
   const toggleShowLink = () => {
@@ -55,6 +56,20 @@ export const SlateEditor = ({ value, onChange, toolbar, disabled }: IEditor) => 
     toggleLink(editor, link)
     toggleShowLink()
     onLinkChange("")
+  }
+
+  const [showImageLink, setShowImageLink] = useState(false)
+  const toggleShowImageLink = () => {
+    setShowImageLink(!showImageLink)
+  }
+  const [imageLink, setImageLink] = useState("")
+  const onImageLinkChange = (value: string) => {
+    setImageLink(value)
+  }
+  const onImageLinkApply = () => {
+    toggleImageLink(editor, imageLink)
+    toggleShowImageLink()
+    onImageLinkChange("")
   }
 
   return (
@@ -116,6 +131,41 @@ export const SlateEditor = ({ value, onChange, toolbar, disabled }: IEditor) => 
                   {format === "left" && <BlockButton format='left' />}
                   {format === "center" && <BlockButton format='center' />}
                   {format === "right" && <BlockButton format='right' />}
+                  {format === "image" && (
+                    <div style={{ position: "relative", display: "inline-block" }}>
+                      <BlockButton format='image' onClick={toggleShowImageLink} />
+                      <div
+                        style={{
+                          display: showImageLink ? "flex" : "none",
+                          position: "absolute",
+                          padding: "0.5rem",
+                          backgroundColor: "#ffffff",
+                          marginLeft: "0.5rem",
+                          marginTop: "0.1rem",
+                          zIndex: "9999",
+                          boxShadow: "0 3px 10px rgb(0 0 0 / 0.2)"
+                        }}
+                      >
+                        <input
+                          style={{ padding: "0.3rem" }}
+                          value={imageLink}
+                          onChange={(e) => onImageLinkChange(e.target.value)}
+                          onKeyUp={(e) => {
+                            if (e.key === "Escape") {
+                              toggleShowImageLink()
+                              onImageLinkChange("")
+                            }
+                            if (e.key === "Enter") {
+                              onImageLinkApply()
+                            }
+                          }}
+                        />
+                        <button style={{ marginLeft: "0.5rem", cursor: "pointer" }} onClick={onImageLinkApply}>
+                          Image link
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </Fragment>
               ))}
           </Toolbar>

@@ -22,10 +22,13 @@ export type ListType = (typeof LIST_TYPES)[number]
 export const TEXT_ALIGN_TYPES = ["left", "center", "right"] as const
 export type TextAlignType = (typeof TEXT_ALIGN_TYPES)[number]
 
-export type ToolTypes = HeadingType | MarkType | InlineType | ListType | TextAlignType
+export const IMAGE_TYPES = ["image"] as const
+export type ImageType = (typeof IMAGE_TYPES)[number]
+
+export type ToolTypes = HeadingType | MarkType | InlineType | ListType | TextAlignType | ImageType
 
 export type CustomElement = {
-  type: "paragraph" | HeadingType | InlineType | MarkType | ListType
+  type: "paragraph" | HeadingType | InlineType | MarkType | ListType | ImageType
   url?: string
   align?: TextAlignType
   children: CustomText[]

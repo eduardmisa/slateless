@@ -5,6 +5,7 @@ import { useCallback, useMemo } from "react"
 import { withHistory } from "slate-history"
 import { Element, Leaf } from "../helpers"
 import { withInLines } from "../hooks/withInLines"
+import { withImages } from "../hooks/withImage"
 
 interface IContent {
   value: string
@@ -29,7 +30,7 @@ export const SlateContent = ({ value }: IContent) => {
 
   const renderElement = useCallback((props) => <Element {...props} />, [])
   const renderLeaf = useCallback((props) => <Leaf {...props} />, [])
-  const editor = useMemo(() => withInLines(withHistory(withReact(createEditor()))), [])
+  const editor = useMemo(() => withInLines(withImages(withHistory(withReact(createEditor())))), [])
 
   return (
     <Slate editor={editor} value={[...parsedValue]}>

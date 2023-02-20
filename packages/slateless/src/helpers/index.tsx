@@ -1,5 +1,5 @@
 import { Editor, Transforms, Element as SlateElement, Range } from "slate"
-import { useSlate } from "slate-react"
+import { useSlate, useSelected, useFocused } from "slate-react"
 import {
   TEXT_ALIGN_TYPES,
   LIST_TYPES,
@@ -9,7 +9,8 @@ import {
   ListType,
   InlineType,
   TextAlignType,
-  ToolTypes
+  ToolTypes,
+  ImageType
 } from "../extends"
 import {
   BoldIcon,
@@ -27,7 +28,8 @@ import {
   Heading4Icon,
   Heading5Icon,
   Heading6Icon,
-  StrikethroughIcon
+  StrikethroughIcon,
+  ImageIcon
 } from "../icons"
 
 export const toggleBlock = (editor, format) => {
@@ -96,6 +98,12 @@ export const toggleLink = (editor, url) => {
   }
 }
 
+export const toggleImageLink = (editor, url) => {
+  const text = { text: "" }
+  const image: CustomElement = { type: "image", url, children: [text] }
+  Transforms.insertNodes(editor, image)
+}
+
 export const isBlockActive = (editor, format, blockType = "type") => {
   const { selection } = editor
   if (!selection) return false
@@ -122,7 +130,29 @@ export const isLinkActive = (editor) => {
   return !!match
 }
 
-export const Element = ({ attributes, children, element }) => {
+const Image = ({ attributes, children, element }) => {
+  const selected = useSelected()
+  const focused = useFocused()
+  return (
+    <div {...attributes}>
+      {children}
+      <div contentEditable={false} style={{ position: "relative" }}>
+        <img
+          src={element.url}
+          alt={element.alt}
+          style={{
+            display: "block",
+            maxWidth: "100%",
+            boxShadow: `${selected && focused ? "0 0 0 3px #B4D5FF" : "none"}`
+          }}
+        />
+      </div>
+    </div>
+  )
+}
+
+export const Element = (props) => {
+  const { attributes, children, element } = props
   const style = { textAlign: element.align }
   switch (element.type) {
     case "heading-1":
@@ -185,6 +215,8 @@ export const Element = ({ attributes, children, element }) => {
           {children}
         </li>
       )
+    case "image":
+      return <Image {...props} />
     default:
       return (
         <p style={style} {...attributes}>
@@ -235,6 +267,7 @@ const Icon = ({ format }: IIcon) => {
       {format === "underline" && <UnderlineIcon />}
       {format === "strikethrough" && <StrikethroughIcon />}
       {format === "link" && <LinkIcon />}
+      {format === "image" && <ImageIcon />}
       {format === "numbered-list" && <ListNumberedIcon />}
       {format === "bulleted-list" && <ListBulletIcon />}
       {format === "left" && <AlignLeftIcon />}
@@ -245,7 +278,7 @@ const Icon = ({ format }: IIcon) => {
 }
 
 interface IBlockButton {
-  format: InlineType | HeadingType | ListType | TextAlignType
+  format: InlineType | HeadingType | ListType | TextAlignType | ImageType
   onClick?: () => void
 }
 export const BlockButton = ({ format, onClick }: IBlockButton) => {
